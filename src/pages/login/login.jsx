@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useAdminLoginMutation } from "../../api/auth";
-import { adminLoginSuccess } from "../../slice/authslice";
 const Login = () => {
   const [email, setEmail] = useState("admin@healthbridge.com");
   const [password, setPassword] = useState("admin123");
@@ -14,7 +12,6 @@ const Login = () => {
 
 
 
-const dispatch = useDispatch();
 const navigate = useNavigate();
 
 const [adminLogin, { isLoading }] = useAdminLoginMutation();
@@ -31,7 +28,6 @@ const handleSubmit = async () => {
     const res = await adminLogin({ email, password }).unwrap();
 
     // ✅ Save admin in redux
-    dispatch(adminLoginSuccess(res.data || res.admin));
 
     // ✅ Redirect to admin dashboard
     navigate("/dashboard", { replace: true });
