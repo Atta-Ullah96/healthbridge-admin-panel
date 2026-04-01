@@ -1,0 +1,54 @@
+name: Deploy HealthBridge admin panel 
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        run: npm install
+
+      # Create .env file dynamically from GitHub Secrets
+      - name: Create .env file
+        run: |
+          echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> .env
+          
+
+      - name: Build Project
+        run: npm run build
+
+       # 6️⃣ Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_S3_REGION }}
+
+      # 7️⃣ Upload build to S3
+      - name: Deploy to S3
+        run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET }} --delete
+
+      # ⚠ If using Create React App, change "dist" to "build"
+
+      # 8️⃣ Invalidate CloudFront Cache
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
+            --paths "/index.html"
+    
