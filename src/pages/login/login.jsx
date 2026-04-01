@@ -26,15 +26,13 @@ const handleSubmit = async () => {
 
   try {
     const res = await adminLogin({ email, password }).unwrap();
+    
 
-    // ✅ Save admin in redux
-
-    // ✅ Redirect to admin dashboard
     navigate("/dashboard", { replace: true });
 
   } catch (err) {
     setError(
-      err?.data?.message || "Invalid email or password"
+      err 
     );
   }
 };
