@@ -4,10 +4,10 @@ import { baseApi } from "./base";
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     adminLogin: builder.mutation({
-      query: (data) => ({
+      query: ({email , password}) => ({
         url: "/admin/login",
         method: "POST",
-        body: data,
+        body: {email, password},
       }),
     }),
 
