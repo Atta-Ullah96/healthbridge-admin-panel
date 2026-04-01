@@ -479,7 +479,7 @@ export default function DoctorManagement() {
                   if (confirmAction.type === "delete") deleteDoctor(id);
                   setConfirmAction(null);
                 }}
-                className={`px-4 py-2 text-sm rounded-xl text-white font-medium transition ${confirmAction.type === "verify" ? "bg-emerald-600 hover:bg-emerald-700"
+                className={`cursor-pointer px-4 py-2 text-sm rounded-xl text-white font-medium transition ${confirmAction.type === "verify" ? "bg-emerald-600 hover:bg-emerald-700"
                   : confirmAction.type === "unban" ? "bg-sky-600 hover:bg-sky-700"
                     : confirmAction.type === "ban" ? "bg-orange-600 hover:bg-orange-700"
                       : confirmAction.type === "reject" ? "bg-rose-600 hover:bg-rose-700"
