@@ -32,7 +32,7 @@ const handleSubmit = async () => {
 
   } catch (err) {
     setError(
-      err 
+      err?.data?.message || "Invalid email or password"
     );
   }
 };
