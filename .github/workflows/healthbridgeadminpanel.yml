@@ -26,7 +26,7 @@ jobs:
       - name: Create .env file
         run: |
           echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> .env
-          echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}" >> .env
+          
 
       - name: Build Project
         run: npm run build
@@ -51,7 +51,4 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
             --paths "/index.html"
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id ${{ secrets.CLOUDFRONT_ID }} \
-            --paths "/index.html"
+    
