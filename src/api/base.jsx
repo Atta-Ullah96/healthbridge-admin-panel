@@ -16,5 +16,5 @@ export const baseApi = createApi({
     "Consultation",
     "role"
   ],
-  endpoints: () => ({}), // empty for now
+ 
 });
