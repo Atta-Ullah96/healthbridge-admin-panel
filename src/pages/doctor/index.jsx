@@ -224,7 +224,6 @@ function DoctorDetailModal({ doctor, onClose }) {
 
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 export default function DoctorManagement() {
-  // const [doctors, setDoctors]         = useState(DUMMY_DOCTORS);
   const { data } = useGetDoctorsQuery({ page: 1, limit: 10, search: "", status: "all" })
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");

@@ -28,7 +28,7 @@ const handleSubmit = async () => {
     const res = await adminLogin({ email, password }).unwrap();
     
 
-    navigate("/dashboard", { replace: true });
+    navigate("/dashboard/overview", { replace: true });
 
   } catch (err) {
     setError(
