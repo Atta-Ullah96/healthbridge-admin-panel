@@ -21,6 +21,7 @@ import {
   Tooltip,
   Legend
 } from "chart.js";
+import {  useOverviewQuery } from "../../api/overview";
 
 ChartJS.register(
   CategoryScale,
@@ -34,11 +35,18 @@ ChartJS.register(
 );
 
 const Overview = () => {
+  const {data:dashboard} = useOverviewQuery()
+  const cardData = dashboard?.cards;
+  const recentAppointments = dashboard?.weeklyappointments?.seventAppointments;
+
+// {totalAppointments: 3, totalPatients: 2, totalEarning: 8500, totalRating: 2.5}
+  
+  // const stats : dashboard?.cards;
   // Stats data
   const stats = [
     {
       title: "Total Patients",
-      value: "1,247",
+      value: cardData?.totalPatients,
       change: "+12%",
       isPositive: true,
       icon: FaUsers,
@@ -46,7 +54,7 @@ const Overview = () => {
     },
     {
       title: "Appointments Today",
-      value: "28",
+      value: cardData?.totalAppointments,
       change: "+5",
       isPositive: true,
       icon: FaCalendarCheck,
@@ -54,15 +62,15 @@ const Overview = () => {
     },
     {
       title: "Active Doctors",
-      value: "45",
+      value: cardData?.ActiveDoctors,
       change: "+3",
       isPositive: true,
       icon: FaUserMd,
       color: "purple"
     },
     {
-      title: "Lab Reports",
-      value: "156",
+      title: "Total Earnings",
+      value: cardData?.totalEarning,
       change: "+18",
       isPositive: true,
       icon: FaFlask,
@@ -120,40 +128,40 @@ const Overview = () => {
     }
   };
 
-  const recentAppointments = [
-    {
-      id: 1,
-      patient: "Ahmed Hassan",
-      doctor: "Dr. Sarah Khan",
-      time: "10:30 AM",
-      status: "confirmed",
-      type: "Video Call"
-    },
-    {
-      id: 2,
-      patient: "Fatima Noor",
-      doctor: "Dr. Ali Raza",
-      time: "11:00 AM",
-      status: "pending",
-      type: "In-person"
-    },
-    {
-      id: 3,
-      patient: "Bilal Ahmed",
-      doctor: "Dr. Ayesha Malik",
-      time: "2:00 PM",
-      status: "confirmed",
-      type: "In-person"
-    },
-    {
-      id: 4,
-      patient: "Sara Yousuf",
-      doctor: "Dr. Imran Ali",
-      time: "3:30 PM",
-      status: "completed",
-      type: "Video Call"
-    }
-  ];
+  // const recentAppointments = [
+  //   {
+  //     id: 1,
+  //     patient: "Ahmed Hassan",
+  //     doctor: "Dr. Sarah Khan",
+  //     time: "10:30 AM",
+  //     status: "confirmed",
+  //     type: "Video Call"
+  //   },
+  //   {
+  //     id: 2,
+  //     patient: "Fatima Noor",
+  //     doctor: "Dr. Ali Raza",
+  //     time: "11:00 AM",
+  //     status: "pending",
+  //     type: "In-person"
+  //   },
+  //   {
+  //     id: 3,
+  //     patient: "Bilal Ahmed",
+  //     doctor: "Dr. Ayesha Malik",
+  //     time: "2:00 PM",
+  //     status: "confirmed",
+  //     type: "In-person"
+  //   },
+  //   {
+  //     id: 4,
+  //     patient: "Sara Yousuf",
+  //     doctor: "Dr. Imran Ali",
+  //     time: "3:30 PM",
+  //     status: "completed",
+  //     type: "Video Call"
+  //   }
+  // ];
 
   const pendingTasks = [
     { id: 1, task: "Review lab reports for patient #1234", priority: "high" },
@@ -200,7 +208,7 @@ const Overview = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat, index) => (
+        {stats?.map((stat, index) => (
           <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <div className={`p-3 rounded-lg ${getColorClasses(stat.color)}`}>
@@ -244,26 +252,26 @@ const Overview = () => {
             <h3 className="text-lg font-semibold text-gray-900">Today's Appointments</h3>
           </div>
           <div className="divide-y divide-gray-200">
-            {recentAppointments.map((apt) => (
+            {recentAppointments?.map((apt) => (
               <div key={apt.id} className="p-6 hover:bg-gray-50 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-semibold">
-                        {apt.patient.split(" ").map(n => n[0]).join("")}
+                        {apt?.patientId?.name.slice(0,1)}
                       </div>
                       <div>
-                        <h4 className="font-semibold text-gray-900">{apt.patient}</h4>
-                        <p className="text-sm text-gray-600">{apt.doctor}</p>
+                        <h4 className="font-semibold text-gray-900">{apt?.patientId?.name}</h4>
+                        <p className="text-sm text-gray-600">{apt?.doctorId?.name}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4 ml-13 text-sm text-gray-600">
                       <div className="flex items-center gap-1">
                         <FaClock className="text-gray-400" />
-                        {apt.time}
+                        {apt?.selectedDate && new Date(apt.selectedDate).toLocaleDateString()}
                       </div>
                       <span>•</span>
-                      <span>{apt.type}</span>
+                      <span>{apt?.appointmentType}</span>
                     </div>
                   </div>
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(apt.status)}`}>
